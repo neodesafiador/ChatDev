@@ -1,0 +1,37 @@
+'''
+This file contains the Game class.
+'''
+from dice import Dice
+from player import Player
+class Game:
+    def __init__(self):
+        self.dice = Dice()
+        self.players = []
+    def add_player(self, name):
+        player = Player(name)
+        self.players.append(player)
+    def start(self):
+        for player in self.players:
+            print(f"{player.name}'s turn:")
+            roll = self.dice.roll()
+            print(f"Rolled: {roll}")
+            player.add_score(roll)
+            print(f"{player.name}'s score: {player.score}")
+            print()
+        winners = self.get_winners()
+        if len(winners) == 1:
+            print(f"The winner is {winners[0].name} with a score of {winners[0].score}!")
+        else:
+            print("It's a tie!")
+            for winner in winners:
+                print(f"{winner.name} has a score of {winner.score}.")
+    def get_players(self):
+        return self.players
+    def get_winners(self):
+        max_score = max(self.players, key=lambda player: player.score).score
+        winners = [player for player in self.players if player.score == max_score]
+        return winners
+    def reset_scores(self):
+        if self.players:
+            for player in self.players:
+                player.score = 0
